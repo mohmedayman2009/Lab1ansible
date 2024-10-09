@@ -1,0 +1,115 @@
+---
+- name: Manage files and symbolic links on app servers
+  hosts: app_servers
+  become: yes
+  tasks:
+
+    - name: Ensure /opt/security directory exists
+      file:
+        path: /opt/security
+        state: directory
+        owner: amr
+        group: amr
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Ensure /opt/security directory exists
+      file:
+        path: /opt/security
+        state: directory
+        owner: mohammed
+        group: mohammed
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Ensure /opt/security directory exists
+      file:
+        path: /opt/security
+        state: directory
+        owner: ahmed
+        group: ahmed
+      when: inventory_hostname == '192.168.1.18'
+
+    - name: Ensure /var/www directory exists
+      file:
+        path: /var/www
+        state: directory
+        owner: amr
+        group: amr
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Ensure /var/www directory exists
+      file:
+        path: /var/www
+        state: directory
+        owner: mohammed
+        group: mohammed
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Ensure /var/www directory exists
+      file:
+        path: /var/www
+        state: directory
+        owner: ahmed
+        group: ahmed
+      when: inventory_hostname == '192.168.1.18'
+
+    - name: Check if /var/www/html exists
+      stat:
+        path: /var/www/html
+      register: html_stat
+
+    - name: Remove existing directory at /var/www/html if it exists
+      file:
+        path: /var/www/html
+        state: absent
+      when: html_stat.stat.exists | default(false)
+
+    - name: Remove existing directory at /var/www/html if it exists
+      file:
+        path: /var/www/html
+        state: absent
+      when: html_stat.stat.exists
+
+    - name: Create blog.txt on app server 1 with owner amr
+      file:
+        path: /opt/security/blog.txt
+        state: touch
+        owner: amr
+        group: amr
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Create story.txt on app server 2 with owner mohammed
+      file:
+        path: /opt/security/story.txt
+        state: touch
+        owner: mohammed
+        group: mohammed
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Create media.txt on app server 3 with owner ahmed
+      file:
+        path: /opt/security/media.txt
+        state: touch
+        owner: ahmed
+        group: ahmed
+      when: inventory_hostname == '192.168.1.18'
+
+    - name: Create symbolic link from /opt/security to /var/www/html on app server 1
+      file:
+        src: /opt/security
+        dest: /var/www/html
+        state: link
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Create symbolic link from /opt/security to /var/www/html on app server 2
+      file:
+        src: /opt/security
+        dest: /var/www/html
+        state: link
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Create symbolic link from /opt/security to /var/www/html on app server 3
+      file:
+        src: /opt/security
+        dest: /var/www/html
+        state: link
+      when: inventory_hostname == '192.168.1.18'

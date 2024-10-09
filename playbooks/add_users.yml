@@ -1,0 +1,40 @@
+---
+- name: Add users and groups on app_server_2
+  hosts: 192.168.1.17
+  become: yes
+  vars_files:
+    - ~/playbooks/data/users.yml
+    - ~/playbooks/data/all.yml  # Load passwords from the file
+
+  tasks:
+
+  - name: Create 'developers' group
+    ansible.builtin.group:
+      name: developers
+
+  - name: Create 'admins' group
+    ansible.builtin.group:
+      name: admins
+
+  - name: Create users under 'developers' group
+    ansible.builtin.user:
+      name: "{{ item }}"
+      group: developers
+      home: "/var/www/{{ item }}"
+      password: "{{ developer_password | string | password_hash('sha512') }}"   # Hash the password
+    loop: "{{ developers }}"
+
+  - name: Create users under 'admins' group
+    ansible.builtin.user:
+      name: "{{ item }}"
+      group: admins
+      home: "/home/{{ item }}"
+      password: "{{ admin_password | string | password_hash('sha512') }}"   # Hash the password
+    loop: "{{ admins }}"
+
+  - name: Add 'admins' users to (sudo) group
+    ansible.builtin.user:
+      name: "{{ item }}"
+      groups: sudo
+      append: yes
+    loop: "{{ admins }}"

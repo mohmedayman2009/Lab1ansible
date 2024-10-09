@@ -1,0 +1,9 @@
+---
+- name: Install httpd on app servers
+  hosts: app_servers
+  become: yes
+  tasks:
+    - name: Install httpd package
+      apt:
+        name: apache2
+        state: present

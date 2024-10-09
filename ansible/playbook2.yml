@@ -1,0 +1,38 @@
+---
+- name: Unarchive devops.zip on app servers
+  hosts: app_servers
+  become: yes
+  tasks:
+
+    - name: Ensure destination directory exists
+      file:
+        path: /opt/data/
+        state: directory
+        mode: '0755'
+
+    - name: Unarchive devops.zip on app server 1
+      unarchive:
+        src: /usr/src/data/devops.zip
+        dest: /opt/data/
+        owner: amr
+        group: amr
+        mode: '0755'
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Unarchive devops.zip on app server 2
+      unarchive:
+        src: /usr/src/data/devops.zip
+        dest: /opt/data/
+        owner: mohammed
+        group: mohammed
+        mode: '0755'
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Unarchive devops.zip on app server 3
+      unarchive:
+        src: /usr/src/data/devops.zip
+        dest: /opt/data/
+        owner: ahmed
+        group: ahmed
+        mode: '0755'
+      when: inventory_hostname == '192.168.1.18'

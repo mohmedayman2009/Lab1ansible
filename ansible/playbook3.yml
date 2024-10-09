@@ -1,0 +1,32 @@
+---
+- name: Conditional file copy based on server hostname
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Copy blog.txt to App Server 1
+      copy:
+        src: /usr/src/dba/blog.txt
+        dest: /opt/dba/blog.txt
+        owner: amr
+        group: amr
+        mode: '0744'
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Copy story.txt to App Server 2
+      copy:
+        src: /usr/src/dba/story.txt
+        dest: /opt/dba/story.txt
+        owner: mohammed
+        group: mohammed
+        mode: '0744'
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Copy media.txt to App Server 3
+      copy:
+        src: /usr/src/dba/media.txt
+        dest: /opt/dba/media.txt
+        owner: ahmed
+        group: ahmed
+        mode: '0744'
+      when: inventory_hostname == '192.168.1.18'

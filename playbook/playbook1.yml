@@ -1,0 +1,32 @@
+---
+- name: Create /opt/nfsshare.txt file on all app servers
+  hosts: app_servers
+  become: yes
+  tasks:
+
+    - name: Create an empty file on app server 1
+      file:
+        path: /opt/nfsshare.txt
+        state: touch
+        owner: amr
+        group: amr
+        mode: '0777'
+      when: inventory_hostname == '192.168.1.16'
+
+    - name: Create an empty file on app server 2
+      file:
+        path: /opt/nfsshare.txt
+        state: touch
+        owner: mohammed
+        group: mohammed
+        mode: '0777'
+      when: inventory_hostname == '192.168.1.17'
+
+    - name: Create an empty file on app server 3
+      file:
+        path: /opt/nfsshare.txt
+        state: touch
+        owner: ahmed
+        group: ahmed
+        mode: '0777'
+      when: inventory_hostname == '192.168.1.18'

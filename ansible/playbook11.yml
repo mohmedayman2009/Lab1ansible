@@ -1,0 +1,53 @@
+---
+- name: Create files and symbolic links on app server 1
+  hosts: 192.168.1.16
+  become: yes
+  tasks:
+    - name: Create blog.txt with owner amr
+      file:
+        path: /opt/security/blog.txt
+        state: touch
+        owner: amr
+        group: amr
+
+    - name: Create symbolic link from /opt/security to /var/www/html
+      file:
+        src: /opt/security
+        dest: /var/www/html
+        state: link
+
+
+- name: Create files and symbolic links on app server 2
+  hosts: 192.168.1.17
+  become: yes
+  tasks:
+    - name: Create story.txt with owner mohammed
+      file:
+        path: /opt/security/story.txt
+        state: touch
+        owner: mohammed
+        group: mohammed
+
+    - name: Create symbolic link from /opt/security to /var/www/html
+      file:
+        src: /opt/security
+        dest: /var/www/html
+        state: link
+
+
+- name: Create files and symbolic links on app server 3
+  hosts: 192.168.1.18
+  become: yes
+  tasks:
+    - name: Create media.txt with owner ahmed
+      file:
+        path: /opt/security/media.txt
+        state: touch
+        owner: ahmed
+        group: ahmed
+
+    - name: Create symbolic link from /opt/security to /var/www/html
+      file:
+        src: /opt/security
+        dest: /var/www/html
+        state: link
